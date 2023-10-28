@@ -1,0 +1,41 @@
+<launch>
+  <!-- Run the map server with the desired map -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find my_robot)/maps/sotano.yaml"/>
+
+  <param name="use_sim_time" value="true" />
+  <!-- Load the URDF into ROS parameter server -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find omni_description)/robot/omni.urdf.xacro' --inorder" />
+
+  <!--RPLIDAR A1
+  <include file="$(find rplidar_ros)/launch/rplidar.launch" />
+  -->
+  <!--
+  <include file="$(find my_robot)/launch2/amcl_omni2.launch" />
+  -->
+  
+  <!--
+  <include file="$(find rplidar_ros)/launch/rplidar.launch" />
+  <include file="$(find my_robot)/launch/amcl_omni.launch" />-->
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <param name="use_sim_time" value="true" />
+
+  
+
+  <!-- Run fake localization compatible with AMCL output--> 
+  <node pkg="fake_localization" type="fake_localization" name="fake_localization" clear_params="true" output="screen">
+     <remap from="base_pose_ground_truth" to="/odom" />
+     <param name="global_frame_id" value="/map" />
+     <param name="base_frame_id" value="omni_base_footprint" />
+  </node>
+
+  <!-- The move_base node 
+  <include file="$(find my_robot)/launch/move_base.launch" />-->
+  <!-- Spawn model -->
+  <node name="rviz" pkg="rviz" type="rviz" args=""/>
+  <!--
+  <node pkg="my_robot" name="waypoint_nav" type="waypoint_nav.py" output="screen"/>-->
+</launch> 

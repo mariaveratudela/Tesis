@@ -1,0 +1,31 @@
+
+<launch>
+<!--
+   <master auto="start"/>
+  Run the map server 
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find my_robot)/maps/testmap.yaml"/>
+--> 
+ <!--- Run AMCL
+    <include file="$(find my_robot)/launch2/amcl_omni2.launch" />
+-->
+
+   <node pkg="move_base" type="move_base" respawn="false" name="move_base" clear_params="true" output="screen">
+    <param name="controller_frequency" value="30"/>
+    <rosparam file="$(find my_robot)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find my_robot)/params/global_costmap_params.yaml" command="load" /> 
+    <rosparam file="$(find my_robot)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find my_robot)/params/local_costmap_params.yaml" command="load" /> 
+    <rosparam file="$(find my_robot)/params/dwa_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find my_robot)/params/base_global_planner_params.yaml" command="load" />
+    <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>
+    <!--
+        navfn/NavfnROS
+    <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>
+    dwa_local_planner/DWAPlannerROS 
+    eband_local_planner/EBandPlannerROS 
+    teb_local_planner/TebLocalPlannerROS
+    -->
+ </node>
+
+</launch> 
