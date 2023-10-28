@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+
+<robot name="omni_xl" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<!-- Import omni XL wheels -->
+    <xacro:include filename="$(find omni_description)/urdf/base/omni_base.gazebo.xacro" />
+	<xacro:include filename="$(find omni_description)/urdf/wheels/omni_wheel.urdf.xacro" />
+	<xacro:include filename="$(find omni_description)/urdf/base/omni_base.urdf.xacro" />
+
+    <xacro:property name="PI" value="3.1415926535897931" />
+	<!-- Wheel parameters -->
+	<xacro:property name="wheel_offset_x" value="0.135" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
+	<xacro:property name="wheel_offset_y" value="0.2075" />
+	<xacro:property name="wheel_offset_z" value="0.0" />
+
+    <xacro:property name="wheel_radius" value="0.05" />
+    <xacro:property name="wheel_height" value="0.052" />
+    <xacro:property name="wheel_mass" value="1.8" /> <!-- in kg-->
+
+    <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertia  ixx="${m*(3*r*r+h*h)/12}" ixy = "0" ixz = "0"
+              iyy="${m*r*r/2}" iyz = "0"
+              izz="${m*(3*r*r+h*h)/12}" />
+    </xacro:macro>
+
+    <link name="sensor_laser">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 1.5708"/>
+            <mass value="1" />
+            <inertia ixx="0.001458" ixy = "0" ixz = "0"
+                iyy="0.001458" iyz = "0"
+                izz="0.00125"/>
+        </inertial>
+        
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 1.5708" />
+            <geometry>
+                <cylinder radius="0.03" length="0.05"/>
+            </geometry>
+            <!--
+            <material name="white" />
+            -->
+        </visual>
+        
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 1.5708"/>
+            <geometry>
+                <cylinder radius="0.05" length="0.05"/>
+            </geometry>
+        </collision>
+    </link>
+   
+    <joint name="joint_sensor_laser" type="fixed">
+        <!--
+        <origin xyz="0.235 -0.18 0.1" rpy="0 0 0"/>
+        -->
+        <origin xyz="0 0 1.1348" rpy="0 0 0"/>
+        <parent link="omni_base_link"/>
+        <child link="sensor_laser"/>
+    </joint>
+
+	<xacro:macro name="robot">
+
+        <xacro:omni_steering/>
+		<xacro:omni_base/>
+
+		<xacro:omni_wheel prefix="omni_front_left" parent="omni_base_link" reflect="true">
+			<origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+		</xacro:omni_wheel>
+
+		<xacro:omni_wheel prefix="omni_front_right" parent="omni_base_link" reflect="false">
+			<origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+		</xacro:omni_wheel>
+
+		<xacro:omni_wheel prefix="omni_back_left" parent="omni_base_link" reflect="true">
+			<origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+		</xacro:omni_wheel>
+
+		<xacro:omni_wheel prefix="omni_back_right" parent="omni_base_link" reflect="false">
+			<origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+		</xacro:omni_wheel>
+
+   </xacro:macro>
+
+   <xacro:robot/>
+
+</robot>
+
