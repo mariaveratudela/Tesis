@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot name="omni_xl" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="omni_base">
+
+      
+	  <!-- Robot mechanical and motor parameters -->
+	  <xacro:property name="PI" value="3.1415926535897931"/>
+	  <xacro:property name="wheel_width" value="0.175" />
+
+	<!-- BASE FOOTPRINT -->
+		<link name="omni_base_footprint">
+		  <visual>
+			  <origin xyz="-0.215732 0.108848 0" rpy="0 0 1.5708" />
+			  <geometry>
+				 <box size="0.001 0.001 0.001" />
+			  </geometry>
+		  </visual>
+		</link>
+
+		<joint name="omni_base_footprint_joint" type="fixed">
+		  <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" /> <!-- ${wheel_radius} property must be defined inside wheel description -->
+		  <parent link="omni_base_footprint"/>
+		  <child link="omni_base_link" />
+		</joint>
+
+  <!-- BASE_LINK -->
+  <link name="omni_base_link">
+    <inertial>
+        <origin xyz="0.108848 -0.215732 -0.05" rpy="0 0 1.5708"/>
+        <mass value="7" />
+        <inertia ixx="1392.536103" ixy="119.858807" ixz="-302.709754" iyy="1477.690202" iyz="144.763107" izz="351.401815"/>
+    </inertial>
+    
+    <collision>
+        <origin rpy="0.0 0 1.5708" xyz="0.108848 -0.215732 -0.05"/>
+        <geometry>
+            <mesh filename="package://omni_description/models/robot_base1.stl" scale="0.01 0.01 0.01"/>
+        </geometry>
+    </collision>
+    
+    <visual>
+        <origin rpy="0.0 0 1.5708" xyz="-0.108848 -0.215732 -0.05"/>
+        <geometry>
+            <mesh filename="package://omni_description/models/robot_base1.stl" scale="0.01 0.01 0.01"/>
+        </geometry>
+        <material name="darkgrey">
+         <color rgba="0.1 0.1 0.1 1"/>
+       </material>
+    </visual>
+
+  </link>
+
+  </xacro:macro>
+
+</robot>
+
