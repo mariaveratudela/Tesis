@@ -1,2 +1,0 @@
-my_robot:omni_description:rplidar_ros
--DCATKIN_DEVEL_PREFIX=/home/maria/tesis/devel -DCMAKE_INSTALL_PREFIX=/home/maria/tesis/install -G Unix Makefiles
